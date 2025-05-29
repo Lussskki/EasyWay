@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
 
-import registerRoute from './routes/register-route.js'
+import {registerRouter, loginRouter} from './Routes/auth-route.js'
 
 
 dotenv.config()
@@ -25,8 +25,8 @@ app.use(cookieParser())
 
 const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.muavqao.mongodb.net/`
 
-app.use('/register', registerRoute)
-
+app.use('/register', registerRouter)
+app.use('/login', loginRouter)
 
 
 
