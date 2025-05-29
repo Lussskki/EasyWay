@@ -2,6 +2,7 @@ import User from "../Models/user-schema.js"
 import bcrypt from 'bcrypt'
 
 import { validationResult } from 'express-validator'
+import { generateAccessToken, generateRefreshToken } from "../Utils/jwt-utils.js"
 
 export const registerUser = async (req, res) => {
     try {
@@ -24,5 +25,31 @@ export const registerUser = async (req, res) => {
 }
 
 export const loginUser = async (req, res) => {
-    console.log('Login controller called')
-}
+    try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
+
+        const { email, password, rememberMe } = req.body
+        const user = await User.findOne({ email })
+        if (!user) return res.status(400).json({ message: 'Invalid email or password' })
+
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if (!isPasswordValid) return res.status(400).json({ message: 'Invalid email or password' })
+
+        const accessToken = generateAccessToken(user._id)
+        const refreshToken = generateRefreshToken(user._id, rememberMe)
+
+        console.log('Access Token:', accessToken)
+        console.log('Refresh Token:', refreshToken)
+
+        res.status(200).json({
+            message: 'Login successful',
+            user: { username: user.username, email: user.email },
+            accessToken,
+            refreshToken
+        })
+    } catch (error) {
+        console.error('Error during login:', error)
+        res.status(500).json({ message: 'Internal server error' })
+    }   
+} 
