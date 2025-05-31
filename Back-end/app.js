@@ -6,6 +6,8 @@ import mongoose from 'mongoose'
 
 
 import {registerRouter, loginRouter} from './Routes/auth-route.js'
+import { createDiscountRouter, getDiscountRouter, deleteDiscountRouter  } from './Routes/discount-route.js'
+// import {  } from './Routes/discount-route.js'
 
 
 dotenv.config()
@@ -27,6 +29,9 @@ const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 app.use('/register', registerRouter)
 app.use('/login', loginRouter)
+app.use('/discount', createDiscountRouter)
+app.use('/discounts', getDiscountRouter)
+app.use('/discount', deleteDiscountRouter)
 
 
 
