@@ -1,22 +1,18 @@
 import { Discount } from "../Models/discount-schema.js"
 import { validationResult } from 'express-validator';
 
+// create
 export const createDiscount = async (req, res) => {
     try {
         const { companyName, telephone, discountPercent } = req.body;
-
-        
         if (!companyName || !telephone || discountPercent === undefined) {
             return res.status(400).json({ message: 'All fields are required' });
         }
-
-        
         const newDiscount = new Discount({
             companyName,
             telephone,
             discountPercent
-        });
-
+        })
         await newDiscount.save();
         res.status(201).json({ message: 'Discount created successfully', discount: newDiscount });
     } catch (error) {
@@ -25,6 +21,7 @@ export const createDiscount = async (req, res) => {
     }
 }
 
+// get
 export const getAllDiscounts = async (req, res) => {
     try {
         const discounts = await Discount.find();
@@ -35,6 +32,30 @@ export const getAllDiscounts = async (req, res) => {
     }
 }
 
+// upt
+export const updateDiscount = async (req, res) => {
+    try{
+        const { id } = req.params
+        const updateData = req.body
+        const errors = validationResult(req)
+        
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() })
+        }        
+
+        if(!id) {
+            return res.status(400).json({ message: 'Discount ID is required'})
+        }
+        
+        const updatedData = await Discount.findByIdAndUpdate(id, updateData, {new: true})
+        res.status(200).json({ message: `${updatedData} is updated` })
+    }catch(error){
+        console.error('Error deleting discount:', error)
+        res.status(500).json({ message: 'Internal server error' })        
+    }
+}
+
+// del 
 export const deleteDiscount = async (req, res) => {
     try {
         const { id } = req.params;
@@ -43,16 +64,13 @@ export const deleteDiscount = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() })
         }
-
         if (!id) {
             return res.status(400).json({ message: 'Discount ID is required' });
         }
-
         const discount = await Discount.findByIdAndDelete(id);
         if (!discount) {
             return res.status(404).json({ message: 'Discount not found' });
         }
-
         res.status(200).json({ message: 'Discount deleted successfully' });
     } catch (error) {
         console.error('Error deleting discount:', error);
