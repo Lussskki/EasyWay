@@ -1,8 +1,12 @@
 import express from 'express'
 
 import { body, param } from 'express-validator'
-import { createDiscount, getAllDiscounts, deleteDiscount } from '../Controllers/discount-controller.js'
+import { createDiscount } from '../Controllers/discount-controller.js'
+import { getAllDiscounts }from '../Controllers/discount-controller.js'
+import { updateDiscount } from '../Controllers/discount-controller.js'
+import { deleteDiscount }from '../Controllers/discount-controller.js'
 
+// create
 const createDiscountRouter = express.Router()
 createDiscountRouter.post(
     '/create',
@@ -12,10 +16,22 @@ createDiscountRouter.post(
         body('expiryDate').isISO8601().withMessage('Expiry date must be a valid date'),
     ],
     createDiscount
-)  
+) 
+
+// get
 const getDiscountRouter = express.Router()
 getDiscountRouter.post('/showAll', getAllDiscounts)
 
+// upt
+const updateDiscountRouter = express.Router()
+updateDiscountRouter.put('/update/:id',
+    [
+        param('id').isMongoId().withMessage('Discount id is required')
+    ],
+    updateDiscount
+)
+
+// del
 const deleteDiscountRouter = express.Router()
 deleteDiscountRouter.delete(
     '/delete/:id',
@@ -25,4 +41,7 @@ deleteDiscountRouter.delete(
     deleteDiscount
 )
 
-export { createDiscountRouter, getDiscountRouter, deleteDiscountRouter }
+export { createDiscountRouter, 
+        getDiscountRouter, 
+        updateDiscountRouter, 
+        deleteDiscountRouter }
