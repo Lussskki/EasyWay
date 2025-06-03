@@ -5,10 +5,12 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
 
-import {registerRouter, loginRouter} from './Routes/auth-route.js'
-import { createDiscountRouter, getDiscountRouter, deleteDiscountRouter  } from './Routes/discount-route.js'
-// import {  } from './Routes/discount-route.js'
-
+import { registerRouter } from './Routes/auth-route.js'
+import { loginRouter } from './Routes/auth-route.js'
+import { createDiscountRouter } from './Routes/discount-route.js'
+import { getDiscountRouter } from './Routes/discount-route.js'
+import { updateDiscountRouter } from './Routes/discount-route.js'
+import { deleteDiscountRouter } from './Routes/discount-route.js'
 
 dotenv.config()
 
@@ -31,6 +33,7 @@ app.use('/register', registerRouter)
 app.use('/login', loginRouter)
 app.use('/discount', createDiscountRouter)
 app.use('/discounts', getDiscountRouter)
+app.use('/discount', updateDiscountRouter)
 app.use('/discount', deleteDiscountRouter)
 
 
