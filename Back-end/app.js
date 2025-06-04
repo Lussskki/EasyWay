@@ -12,6 +12,9 @@ import { getDiscountRouter } from './Routes/discount-route.js'
 import { updateDiscountRouter } from './Routes/discount-route.js'
 import { deleteDiscountRouter } from './Routes/discount-route.js'
 
+// partner
+import partnersRouter  from './Routes/partners-route.js'
+
 dotenv.config()
 
 
@@ -35,6 +38,7 @@ app.use('/discount', createDiscountRouter)
 app.use('/discounts', getDiscountRouter)
 app.use('/discount', updateDiscountRouter)
 app.use('/discount', deleteDiscountRouter)
+app.use('/partner', partnersRouter)
 
 
 
