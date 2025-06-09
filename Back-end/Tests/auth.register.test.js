@@ -1,6 +1,6 @@
 import request from 'supertest'
 import express from 'express'
-import { registerRouter, loginRouter } from '../Routes/auth-route.js'
+import { registerRouter } from '../Routes/auth-route.js'
 
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
