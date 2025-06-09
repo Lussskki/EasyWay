@@ -42,6 +42,13 @@ export const loginUser = async (req, res) => {
         console.log('Access Token:', accessToken)
         console.log('Refresh Token:', refreshToken)
 
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.SECRET === 'production',
+            sameSite: 'Strict',
+            path: '/',
+            maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
+        })
         res.status(200).json({
             message: 'Login successful',
             user: { username: user.username, email: user.email },
