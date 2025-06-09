@@ -5,8 +5,15 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
 
-import registerRoute from './routes/register-route.js'
+import { registerRouter } from './Routes/auth-route.js'
+import { loginRouter } from './Routes/auth-route.js'
+import { createDiscountRouter } from './Routes/discount-route.js'
+import { getDiscountRouter } from './Routes/discount-route.js'
+import { updateDiscountRouter } from './Routes/discount-route.js'
+import { deleteDiscountRouter } from './Routes/discount-route.js'
 
+// partner
+import partnersRouter  from './Routes/partners-route.js'
 
 dotenv.config()
 
@@ -25,8 +32,13 @@ app.use(cookieParser())
 
 const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.muavqao.mongodb.net/`
 
-app.use('/register', registerRoute)
-
+app.use('/register', registerRouter)
+app.use('/login', loginRouter)
+app.use('/discount', createDiscountRouter)
+app.use('/discounts', getDiscountRouter)
+app.use('/discount', updateDiscountRouter)
+app.use('/discount', deleteDiscountRouter)
+app.use('/partner', partnersRouter)
 
 
 
