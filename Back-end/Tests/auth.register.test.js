@@ -21,10 +21,23 @@ app.use('/register', registerRouter)
 
 describe('User Registration and Login', () => {
   const testUser = {
-    username: 'testuser123',
-    email: 'testuser123@example.com',
-    password: 'password123',
+    "username": "john_d",
+    "email": "john2@example.com",
+    "password": "securePassword123",
+    "cards": [
+      {
+        "cardNumber": "5111111111111111",
+        "expiryDate": "13/16",
+        "cvv": "123"
+      },
+      {
+        "cardNumber": "5502400000000004",
+        "expiryDate": "10/37",
+        "cvv": "456"
+      }
+    ]
   }
+
   // register
   it('should register user with valid data', async () => {
     const res = await request(app).post('/register').send(testUser)
