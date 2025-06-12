@@ -1,4 +1,5 @@
 import User from "../Models/user-schema.js"
+import Card from "../Models/card-schema.js"
 import bcrypt from 'bcrypt'
 
 import { validationResult } from 'express-validator'
@@ -9,12 +10,24 @@ export const registerUser = async (req, res) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
 
-        const { username, email, password } = req.body
+        const { username, 
+                email, 
+                password,
+                cards } = req.body
+        const createdCardIds = []
+        for (const cardData of cards) {
+            let createdCard = await Card.create(cardData)
+            createdCardIds.push(createdCard._id)
+        }
+        
         const existingUser = await User.findOne({ email })
         if (existingUser) { return res.status(400).json({ message: 'User already exists' })}
         
         const hashedPassword = await bcrypt.hash(password, 10)   
-        const newUser = new User({ username, email, password: hashedPassword })
+        const newUser = new User({ username, 
+                                   email, 
+                                   password: hashedPassword,
+                                   cardId: createdCardIds})
         await newUser.save(newUser)
         
         res.status(201).json({ message: 'User registered successfully' })
