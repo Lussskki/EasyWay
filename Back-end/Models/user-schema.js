@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import cardSchema from '../Models/card-schema.js'
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -14,9 +13,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     validate: {
-      validator: function (v) {
-        return /^.+@.+\..+$/.test(v)
-      },
+      validator: v => /^.+@.+\..+$/.test(v),
       message: props => `${props.value} is not a valid email!`
     }
   },
@@ -24,11 +21,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  cardId: [{
+  package: {
+    type: String,
+    enum: ['PREMIUM', 'ELITE ENTRY', 'BLACK GOLD'],
+    required: true
+  },
+  cards: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Card',
-    cardSchema
-  }], 
+    ref: 'Card'
+  }],
   createdAt: {
     type: Date,
     default: Date.now
@@ -38,4 +39,3 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('Users', userSchema)
 
 export default User
-
